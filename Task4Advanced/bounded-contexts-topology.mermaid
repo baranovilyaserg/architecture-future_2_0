@@ -1,0 +1,77 @@
+graph TB
+    subgraph Core["Core Event Bus - Kafka"]
+        topics["20+ Topics<br/>Event Stream<br/>Schema Registry"]
+    end
+
+    subgraph Fintech["Fintech Domain<br/>Payments & Credits"]
+        F1["Payment Aggregate<br/>Account Aggregate<br/>Credit Aggregate"]
+        FE["Events:<br/>payment.created<br/>balance.updated<br/>credit.approved"]
+    end
+
+    subgraph Clinics["Clinics Domain<br/>Operations"]
+        C1["Patient Aggregate<br/>Visit Aggregate<br/>Capacity Aggregate"]
+        CE["Events:<br/>patient.registered<br/>visit.completed<br/>capacity.updated"]
+    end
+
+    subgraph AIops["AI Operations Domain<br/>Models & ML"]
+        A1["Model Aggregate<br/>InferenceJob Aggregate"]
+        AE["Events:<br/>model.trained<br/>inference.completed<br/>quality.alert"]
+    end
+
+    subgraph Analytics["Analytics Domain<br/>Reporting & KPIs"]
+        An1["Report Aggregate<br/>Dashboard Aggregate"]
+        AnE["Events:<br/>report.generated<br/>alert.triggered"]
+    end
+
+    subgraph Platform["Platform Ops<br/>Monitoring & SLA"]
+        P1["Service Aggregate<br/>SLA Aggregate"]
+        PE["Events:<br/>service.health_changed<br/>sla.breached"]
+    end
+
+    subgraph Vitrine["Vitrine Data Product<br/>Self-Service BI"]
+        V1["Data Product Aggregate<br/>Metric Aggregate"]
+        VE["Read Models:<br/>Fintech Product<br/>Clinics Product<br/>AI Product<br/>Platform Product"]
+    end
+
+    subgraph Storage["Storage Tier"]
+        EventStore["Event Store<br/>PostgreSQL<br/>Append-only"]
+        DataLake["Data Lake<br/>Snowflake<br/>Analytics"]
+        Cache["Cache Layer<br/>Redis/Cassandra"]
+    end
+
+    Fintech --> topics
+    Clinics --> topics
+    AIops --> topics
+    Analytics --> topics
+    Platform --> topics
+
+    topics --> Vitrine
+    topics --> Analytics
+    topics --> Platform
+
+    F1 -.->|publishes| FE
+    C1 -.->|publishes| CE
+    A1 -.->|publishes| AE
+    An1 -.->|publishes| AnE
+    P1 -.->|publishes| PE
+
+    FE --> topics
+    CE --> topics
+    AE --> topics
+    AnE --> topics
+    PE --> topics
+
+    topics --> EventStore
+    EventStore --> DataLake
+    DataLake --> Cache
+    DataLake --> Vitrine
+
+    style Core fill:#F3E5F5,stroke:#7B1FA2,stroke-width:3px,color:#fff
+    style Fintech fill:#FFEBEE,stroke:#D32F2F,stroke-width:2px,color:#000
+    style Clinics fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000
+    style AIops fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000
+    style Analytics fill:#E8F5E9,stroke:#388E3C,stroke-width:2px,color:#000
+    style Platform fill:#FCE4EC,stroke:#C2185B,stroke-width:2px,color:#000
+    style Vitrine fill:#E0F2F1,stroke:#00796B,stroke-width:2px,color:#000
+    style Storage fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+

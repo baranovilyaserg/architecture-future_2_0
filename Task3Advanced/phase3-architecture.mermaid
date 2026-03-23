@@ -1,0 +1,93 @@
+graph TB
+    subgraph UI["User Interface Layer"]
+        portal["Self-Service Portal"]
+        mobile["Mobile Apps"]
+        domain_ui["Domain-Specific UIs"]
+    end
+
+    subgraph Gateway["API Gateway & Mesh"]
+        apigw["API Gateway - Istio/Linkerd"]
+        auth["Auth + RBAC"]
+        mesh["Service Mesh"]
+    end
+
+    subgraph EventPlatform["Event Streaming Platform"]
+        kafka["Kafka Cluster HA<br/>20+ topics<br/>Multi-region"]
+        schema["Schema Registry"]
+        dlq["DLQ + Replay"]
+        security["mTLS + Encryption"]
+    end
+
+    subgraph Domains["Domain Services"]
+        fintech["Fintech Domain<br/>Ledger / Payments"]
+        clinics["Clinics Domain<br/>Patient / Visits"]
+        aiops["AI Operations<br/>Models / Inference"]
+        analytics["Analytics Exec<br/>Reports / KPIs"]
+        platform["Platform Ops<br/>SLAs / Performance"]
+        vitrine["Vitrine Service<br/>Self-Service BI"]
+    end
+
+    subgraph Streaming["⚡ Stream Processing"]
+        kstreams["Kafka Streams + Flink"]
+        agg1["Real-time Aggregations"]
+        agg2["ML Feature Engineering"]
+        agg3["Vitrine v3 Updates"]
+    end
+
+    subgraph Storage["Data Storage Layer"]
+        eventstore["Event Store - PostgreSQL<br/>Append-only, 7yr"]
+        datamesh["Data Mesh - Snowflake<br/>4 Data Products"]
+        cache["Cache - Redis/Cassandra<br/>Hot data TTL"]
+        search["Search - ELK<br/>Audit logs"]
+    end
+
+    subgraph Observability["Observability & Security"]
+        prom["Prometheus + Grafana"]
+        elk["ELK Stack"]
+        jaeger["Jaeger Tracing"]
+        audit["Audit Trail + RBAC"]
+    end
+
+    portal --> apigw
+    mobile --> apigw
+    domain_ui --> apigw
+    apigw --> auth
+    apigw --> mesh
+    auth --> kafka
+    mesh --> kafka
+    kafka --> schema
+    kafka --> dlq
+    kafka --> security
+    kafka --> fintech
+    kafka --> clinics
+    kafka --> aiops
+    kafka --> analytics
+    kafka --> platform
+    kafka --> vitrine
+    fintech --> kstreams
+    clinics --> kstreams
+    aiops --> kstreams
+    analytics --> kstreams
+    platform --> kstreams
+    vitrine --> kstreams
+    kstreams --> agg1
+    kstreams --> agg2
+    kstreams --> agg3
+    agg1 --> eventstore
+    agg2 --> eventstore
+    agg3 --> eventstore
+    eventstore --> datamesh
+    datamesh --> cache
+    datamesh --> search
+    kafka -.->|Monitoring| prom
+    kafka -.->|Logs| elk
+    kafka -.->|Traces| jaeger
+    eventstore -.->|Audit| audit
+
+    style UI fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000
+    style Gateway fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000
+    style EventPlatform fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    style Domains fill:#E8F5E9,stroke:#388E3C,stroke-width:2px,color:#000
+    style Streaming fill:#FCE4EC,stroke:#C2185B,stroke-width:2px,color:#000
+    style Storage fill:#E0F2F1,stroke:#00796B,stroke-width:2px,color:#000
+    style Observability fill:#FFF9C4,stroke:#F9A825,stroke-width:2px,color:#000
