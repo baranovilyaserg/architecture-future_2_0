@@ -1,0 +1,89 @@
+graph TB
+    subgraph FinTech["Fintech Domain Events"]
+        FE1["payment.created"]
+        FE2["payment.settled"]
+        FE3["balance.updated"]
+        FE4["credit.approved"]
+        FE5["interest.accrued"]
+    end
+
+    subgraph Clinics["Clinics Domain Events"]
+        CE1["patient.registered"]
+        CE2["visit.scheduled"]
+        CE3["visit.completed"]
+        CE4["treatment.prescribed"]
+        CE5["capacity.updated"]
+    end
+
+    subgraph AIops["AI Operations Domain Events"]
+        AE1["model.trained"]
+        AE2["model.deployed"]
+        AE3["inference.completed"]
+        AE4["quality.alert"]
+    end
+
+    subgraph Analytics["Analytics Domain Events"]
+        AnE1["report.generated"]
+        AnE2["alert.triggered"]
+    end
+
+    subgraph Platform["Platform Ops Domain Events"]
+        PE1["service.health_changed"]
+        PE2["sla.breached"]
+    end
+
+    subgraph Subscribers["Event Subscribers"]
+        S1["Vitrine Data<br/>Snowflake"]
+        S2["Analytics<br/>Stream"]
+        S3["Platform<br/>Monitoring"]
+        S4["Event Store<br/>PostgreSQL"]
+    end
+
+    FE1 --> S1
+    FE1 --> S4
+    FE2 --> S1
+    FE2 --> S3
+    FE2 --> S4
+    FE3 --> S1
+    FE3 --> S4
+    FE4 --> S1
+    FE4 --> S4
+    FE5 --> S1
+    FE5 --> S4
+
+    CE1 --> S1
+    CE1 --> S4
+    CE2 --> S1
+    CE2 --> S4
+    CE3 --> S1
+    CE3 --> S4
+    CE4 --> S2
+    CE4 --> S4
+    CE5 --> S1
+    CE5 --> S4
+
+    AE1 --> S4
+    AE2 --> S1
+    AE2 --> S4
+    AE3 --> S1
+    AE3 --> S2
+    AE3 --> S4
+    AE4 --> S3
+    AE4 --> S4
+
+    AnE1 --> S1
+    AnE1 --> S4
+    AnE2 --> S3
+    AnE2 --> S4
+
+    PE1 --> S3
+    PE1 --> S4
+    PE2 --> S3
+    PE2 --> S4
+
+    style FinTech fill:#FFEBEE,stroke:#D32F2F,stroke-width:2px,color:#000
+    style Clinics fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000
+    style AIops fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000
+    style Analytics fill:#E8F5E9,stroke:#388E3C,stroke-width:2px,color:#000
+    style Platform fill:#FCE4EC,stroke:#C2185B,stroke-width:2px,color:#000
+    style Subscribers fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#fff
